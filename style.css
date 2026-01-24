@@ -1,103 +1,57 @@
 :root {
-    --bg-color: #0a0a0a;
+    --bg-color: #050505;
+    --accent-blue: #007aff;
+    --accent-red: #ff3b3b;
+    --text-main: #ffffff;
     --card-bg: rgba(255, 255, 255, 0.05);
-    --bandit-color: #ff3b3b; /* Неоновый красный */
-    --cop-color: #007aff;    /* Глубокий синий */
-    --text-color: #ffffff;
 }
 
 body {
     background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Segoe UI', Roboto, sans-serif;
+    color: var(--text-main);
+    font-family: 'Courier New', monospace;
     margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
     overflow: hidden;
 }
 
-#app-container {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-header h1 {
-    font-size: 1.2rem;
-    text-align: center;
-    letter-spacing: 2px;
-    border-bottom: 1px solid var(--card-bg);
-    padding-bottom: 10px;
-}
-
-.stats-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 15px;
-    margin: 20px 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.stats-card p {
-    margin: 5px 0;
-    font-weight: bold;
-    font-size: 1.1rem;
-}
-
-#action-zone {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.action-btn {
+#radar-container {
     width: 200px;
     height: 200px;
+    margin: 10px auto;
+    border: 1px solid var(--accent-blue);
     border-radius: 50%;
+    position: relative;
+    background: radial-gradient(circle, rgba(0,122,255,0.1) 0%, black 100%);
+}
+
+.radar-scanner {
+    position: absolute;
+    width: 100%; height: 100%;
+    background: conic-gradient(from 0deg, transparent, var(--accent-blue));
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: rotate 3s linear infinite;
+}
+
+.target-point {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: var(--accent-red);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-red);
+    animation: blink 0.8s infinite;
+}
+
+@keyframes rotate { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
+@keyframes blink { 0% {opacity: 1;} 50% {opacity: 0.3;} 100% {opacity: 1;} }
+
+.action-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--accent-blue);
+    color: white;
     border: none;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-    transition: transform 0.1s, box-shadow 0.3s;
-    text-transform: uppercase;
-}
-
-/* Стили для Бандита */
-.bandit-theme .action-btn {
-    background: radial-gradient(circle, var(--bandit-color), #660000);
-    box-shadow: 0 0 20px var(--bandit-color);
-}
-
-/* Стили для Копа */
-.cop-theme .action-btn {
-    background: radial-gradient(circle, var(--cop-color), #002a66);
-    box-shadow: 0 0 20px var(--cop-color);
-}
-
-.action-btn:active {
-    transform: scale(0.95);
-}
-
-footer {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.nav-btn {
-    background: var(--card-bg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 10px;
     border-radius: 10px;
-    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
