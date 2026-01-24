@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bharat Boss Console</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <header>
+            <h1 id="status-title">LOADING SYSTEM...</h1>
+        </header>
+        <div class="stats-card">
+            <p>💰 INF: <span id="balance">0</span></p>
+            <p>⭐ RANK: <span id="level">1</span></p>
+        </div>
+        <div id="action-zone">
+            <button id="main-action-btn" class="action-btn">CONNECTING...</button>
+        </div>
+        <footer>
+            <button class="nav-btn" onclick="openMarket()">🛒 MARKET</button>
+            <button class="nav-btn">👥 CLAN</button>
+            <button class="nav-btn">⚙️ SETTINGS</button>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
