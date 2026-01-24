@@ -1,25 +1,39 @@
 const tg = window.Telegram.WebApp;
-tg.expand(); // Расширяем на весь экран
+tg.expand();
 
-const body = document.body;
-const actionBtn = document.getElementById('main-action-btn');
-const statusTitle = document.getElementById('status-title');
+const targets = [
+    { name: "STREET THUG", risk: "LOW", reward: 800 },
+    { name: "CYBER HEIST", risk: "MEDIUM", reward: 2500 },
+    { name: "DATA BREACH", risk: "HIGH", reward: 12000 },
+    { name: "SYNDICATE BOSS", risk: "CRITICAL", reward: 45000 }
+];
 
-// Эмуляция получения роли (в будущем будем брать из БД)
-// Пока сделаем случайно для теста
-const userRole = Math.random() > 0.5 ? 'bandit' : 'cop';
+let balance = parseInt(localStorage.getItem('balance')) || 15000;
+let currentTarget = targets[0];
 
-if (userRole === 'bandit') {
-    body.classList.add('bandit-theme');
-    statusTitle.innerText = "SYNDICATE TERMINAL";
-    actionBtn.innerText = "START ROBBERY";
-} else {
-    body.classList.add('cop-theme');
-    statusTitle.innerText = "ENFORCER UNIT";
-    actionBtn.innerText = "PATROL";
+function updateUI() {
+    document.getElementById('balance').innerText = balance.toLocaleString();
+    localStorage.setItem('balance', balance);
 }
 
-actionBtn.addEventListener('click', () => {
-    tg.HapticFeedback.impactOccurred('heavy'); // Вибрация при нажатии
-    alert(userRole === 'bandit' ? "YOU CARRIED OUT A RAID!" : "YOU APPREHENDED THE CRIMINAL!");
+function scanForTargets() {
+    currentTarget = targets[Math.floor(Math.random() * targets.length)];
+    document.getElementById('target-name').innerText = currentTarget.name;
+    document.getElementById('risk-level').innerText = currentTarget.risk;
+}
+
+document.getElementById('main-action-btn').addEventListener('click', () => {
+    tg.HapticFeedback.impactOccurred('medium');
+    
+    // Simulate tactical success
+    tg.showConfirm(`CONFIRM NEUTRALIZATION: ${currentTarget.name}?`, (confirmed) => {
+        if (confirmed) {
+            balance += currentTarget.reward;
+            updateUI();
+            scanForTargets();
+        }
+    });
 });
+
+scanForTargets();
+updateUI();
