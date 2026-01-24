@@ -12,14 +12,14 @@ const userRole = Math.random() > 0.5 ? 'bandit' : 'cop';
 if (userRole === 'bandit') {
     body.classList.add('bandit-theme');
     statusTitle.innerText = "SYNDICATE TERMINAL";
-    actionBtn.innerText = "ГРАБИТЬ";
+    actionBtn.innerText = "START ROBBERY";
 } else {
     body.classList.add('cop-theme');
     statusTitle.innerText = "ENFORCER UNIT";
-    actionBtn.innerText = "ПАТРУЛЬ";
+    actionBtn.innerText = "PATROL";
 }
 
 actionBtn.addEventListener('click', () => {
     tg.HapticFeedback.impactOccurred('heavy'); // Вибрация при нажатии
-    alert(userRole === 'bandit' ? "Вы совершили налет!" : "Вы задержали преступника!");
+    alert(userRole === 'bandit' ? "YOU CARRIED OUT A RAID!" : "YOU APPREHENDED THE CRIMINAL!");
 });
