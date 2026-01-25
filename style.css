@@ -1,58 +1,57 @@
 :root {
-    --bg-color: #050505;
-    --accent-blue: #007aff;
-    --accent-red: #ff3b3b;
-    --text-main: #ffffff;
-    --card-bg: rgba(255, 255, 255, 0.05);
+    --bg-color: #020202;
+    --neon-blue: #00d2ff;
+    --neon-red: #ff0055;
+    --neon-green: #39ff14;
+    --glass: rgba(255, 255, 255, 0.03);
 }
 
 body {
     background-color: var(--bg-color);
-    color: var(--text-main);
+    color: white;
     font-family: 'Courier New', monospace;
     margin: 0; padding: 20px;
     display: flex; flex-direction: column; align-items: center;
-    user-select: none; touch-action: manipulation;
+    overflow: hidden; user-select: none; touch-action: manipulation;
 }
 
 #radar-container {
     width: 200px; height: 200px;
-    margin: 10px auto; border: 2px solid var(--accent-blue);
+    margin: 20px auto; border: 1px solid var(--neon-blue);
     border-radius: 50%; position: relative;
-    background: radial-gradient(circle, rgba(0,122,255,0.1) 0%, black 100%);
-    overflow: hidden;
+    background: radial-gradient(circle, rgba(0,210,255,0.1) 0%, black 100%);
 }
 
 .radar-scanner {
     position: absolute; width: 100%; height: 100%;
-    background: conic-gradient(from 0deg, transparent, var(--accent-blue));
+    background: conic-gradient(from 0deg, transparent, var(--neon-blue));
     border-radius: 50%; opacity: 0.3;
-    animation: rotate 3s linear infinite;
+    animation: rotate 4s linear infinite;
 }
 
 @keyframes rotate { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
 
-.battle-dot {
-    position: absolute; width: 55px; height: 55px;
-    background: radial-gradient(circle, var(--accent-red), transparent);
-    border: 2px solid white; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: bold; font-size: 16px;
-    box-shadow: 0 0 20px var(--accent-red);
-    z-index: 1000; animation: spawn 0.15s ease-out;
-}
-
-@keyframes spawn { from {transform: scale(0.5); opacity: 0;} to {transform: scale(1); opacity: 1;} }
-
-.battle-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.95); display: none;
-    z-index: 999; flex-direction: column; align-items: center;
+.stats-card {
+    width: 100%; background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 15px; margin-bottom: 10px;
 }
 
 .action-btn {
-    width: 100%; padding: 20px; background: var(--accent-blue);
-    color: white; border: none; border-radius: 12px;
-    font-weight: bold; font-size: 18px; letter-spacing: 2px;
-    margin-top: 20px; box-shadow: 0 4px 15px rgba(0,122,255,0.4);
+    width: 100%; padding: 20px; background: var(--neon-blue);
+    color: black; border: none; border-radius: 10px;
+    font-weight: 900; font-size: 16px; letter-spacing: 1px;
+    box-shadow: 0 0 15px var(--neon-blue);
+}
+
+.battle-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95); display: none; z-index: 999;
+}
+
+.battle-dot {
+    position: absolute; width: 60px; height: 60px;
+    background: rgba(255,0,85,0.3); border: 2px solid var(--neon-red);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 20px var(--neon-red);
 }
