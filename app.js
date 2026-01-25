@@ -1,70 +1,161 @@
-const tg = window.Telegram.WebApp;
-tg.expand();
+const tg = window.Telegram?.WebApp;
+if (tg) {
+  tg.expand();
+  tg.ready();
+}
 
-let balance = parseInt(localStorage.getItem('inf_data')) || 0;
+const $ = (id) => document.getElementById(id);
+
+let balance = Number(localStorage.getItem("inf_data") || 0);
 let hits = 0;
-const goal = 15;
+let goal = 15;
+let active = false;
+
+// чуть “OS-логика”: ранги
+function getRank(b) {
+  if (b >= 500000) return "BOSS";
+  if (b >= 200000) return "COMMANDER";
+  if (b >= 80000) return "AGENT";
+  if (b >= 20000) return "RUNNER";
+  return "RECRUIT";
+}
 
 function updateDisplay() {
-    document.getElementById('balance').innerText = balance.toLocaleString();
-    localStorage.setItem('inf_data', balance);
+  $("balance").innerText = balance.toLocaleString();
+  $("rank").innerText = getRank(balance);
+  localStorage.setItem("inf_data", String(balance));
+}
+
+function haptic(type = "light") {
+  try {
+    tg?.HapticFeedback?.impactOccurred(type);
+  } catch {}
+}
+
+function notify(type = "success") {
+  try {
+    tg?.HapticFeedback?.notificationOccurred(type);
+  } catch {}
 }
 
 function showPage(pageId) {
-    tg.HapticFeedback.impactOccurred('light');
-    document.getElementById('page-radar').style.display = (pageId === 'radar') ? 'block' : 'none';
-    document.getElementById('page-market').style.display = (pageId === 'market') ? 'block' : 'none';
-    document.getElementById('page-leaders').style.display = (pageId === 'leaders') ? 'block' : 'none';
-    
-    const items = document.querySelectorAll('.nav-item');
-    items[0].classList.toggle('active', pageId === 'radar');
-    items[1].classList.toggle('active', pageId === 'market');
-    items[2].classList.toggle('active', pageId === 'leaders');
+  haptic("light");
+
+  $("page-radar").style.display = pageId === "radar" ? "block" : "none";
+  $("page-market").style.display = pageId === "market" ? "block" : "none";
+  $("page-leaders").style.display = pageId === "leaders" ? "block" : "none";
+
+  document.querySelectorAll(".nav-item").forEach((el) => {
+    el.classList.toggle("active", el.dataset.page === pageId);
+  });
 }
 
+/* ---------- MISSION ---------- */
+
 function startMission() {
-    hits = 0;
-    document.getElementById('combat-overlay').style.display = 'block';
-    document.getElementById('progress-bar').style.width = "0%";
-    spawnTarget();
+  if (active) return;
+  active = true;
+
+  // можно чуть усложнить: чем больше баланс — тем выше цель
+  goal = 15; // базово как было
+  hits = 0;
+
+  $("hits").innerText = String(hits);
+  $("goal").innerText = String(goal);
+
+  $("combat-overlay").style.display = "block";
+  $("progress-bar").style.width = "0%";
+
+  spawnTarget();
+}
+
+function setProgress() {
+  const pct = Math.min(100, Math.round((hits / goal) * 100));
+  $("progress-bar").style.width = pct + "%";
+  $("hits").innerText = String(hits);
 }
 
 function spawnTarget() {
-    const arena = document.getElementById('arena');
-    arena.innerHTML = '';
-    const dot = document.createElement('div');
-    dot.className = 'combat-dot';
-    dot.style.top = Math.random() * 80 + 5 + "%";
-    dot.style.left = Math.random() * 80 + 5 + "%";
-    dot.innerText = "PUSH"; // ЗАМЕНЕНО НА PUSH
+  const arena = $("arena");
+  arena.innerHTML = "";
 
-    dot.onclick = (e) => {
-        e.stopPropagation();
-        tg.HapticFeedback.impactOccurred('heavy');
-        hits++;
-        document.getElementById('progress-bar').style.width = (hits / goal * 100) + "%";
-        
-        if (hits < goal) {
-            spawnTarget();
-        } else {
-            endMission();
-        }
-    };
-    arena.appendChild(dot);
+  const dot = document.createElement("div");
+  dot.className = "combat-dot";
+  dot.textContent = "PUSH";
+
+  // безопасные границы по размеру точки (чтобы не вылазило за край)
+  const rect = arena.getBoundingClientRect();
+  const size = 96;
+  const pad = 14;
+
+  const maxX = Math.max(pad, rect.width - size - pad);
+  const maxY = Math.max(pad, rect.height - size - pad);
+
+  const x = pad + Math.random() * maxX;
+  const y = pad + Math.random() * maxY;
+
+  dot.style.left = `${x}px`;
+  dot.style.top = `${y}px`;
+
+  // pointerdown быстрее и стабильнее, чем onclick
+  dot.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    haptic("heavy");
+    hits += 1;
+    setProgress();
+
+    if (hits < goal) {
+      // чуть “темп” чтобы ощущалось мощно
+      requestAnimationFrame(spawnTarget);
+    } else {
+      endMission();
+    }
+  });
+
+  arena.appendChild(dot);
 }
 
 function endMission() {
-    document.getElementById('combat-overlay').style.display = 'none';
-    const reward = 10000;
-    balance += reward;
-    tg.showAlert(`MISSION SUCCESS!\nEarned: +$${reward.toLocaleString()}`);
-    updateDisplay();
+  active = false;
+  $("combat-overlay").style.display = "none";
+
+  const reward = 10000;
+  balance += reward;
+  updateDisplay();
+
+  // ✅ фикс: нормальная строка
+  const msg = `MISSION SUCCESS!\nEarned: +$${reward.toLocaleString()}`;
+
+  try {
+    tg?.showAlert ? tg.showAlert(msg) : alert(msg);
+  } catch {
+    alert(msg);
+  }
 }
 
-document.getElementById('start-btn').onclick = () => {
-    tg.HapticFeedback.notificationOccurred('success');
-    startMission();
-};
+function abortMission() {
+  active = false;
+  $("combat-overlay").style.display = "none";
+  notify("error");
+}
 
-// Start UI
+/* ---------- EVENTS ---------- */
+
+$("start-btn").addEventListener("pointerdown", () => {
+  notify("success");
+  startMission();
+});
+
+$("exit-btn").addEventListener("pointerdown", () => {
+  abortMission();
+});
+
+document.querySelectorAll(".nav-item").forEach((el) => {
+  el.addEventListener("pointerdown", () => showPage(el.dataset.page));
+});
+
+// init
 updateDisplay();
+showPage("radar");
