@@ -3,89 +3,56 @@
     --accent-blue: #007aff;
     --accent-red: #ff3b3b;
     --text-main: #ffffff;
-    --card-bg: rgba(255, 255, 255, 0.08);
+    --card-bg: rgba(255, 255, 255, 0.05);
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
     font-family: 'Courier New', monospace;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin: 0; padding: 20px;
+    display: flex; flex-direction: column; align-items: center;
+    user-select: none; touch-action: manipulation;
 }
 
-/* RADAR SYSTEM */
 #radar-container {
-    width: 180px;
-    height: 180px;
-    margin: 10px auto;
-    border: 2px solid var(--accent-blue);
-    border-radius: 50%;
-    position: relative;
-    background: radial-gradient(circle, rgba(0,122,255,0.15) 0%, black 100%);
+    width: 200px; height: 200px;
+    margin: 10px auto; border: 2px solid var(--accent-blue);
+    border-radius: 50%; position: relative;
+    background: radial-gradient(circle, rgba(0,122,255,0.1) 0%, black 100%);
     overflow: hidden;
-    box-shadow: 0 0 15px rgba(0,122,255,0.3);
 }
 
 .radar-scanner {
-    position: absolute;
-    width: 100%; height: 100%;
+    position: absolute; width: 100%; height: 100%;
     background: conic-gradient(from 0deg, transparent, var(--accent-blue));
-    border-radius: 50%;
-    opacity: 0.4;
+    border-radius: 50%; opacity: 0.3;
     animation: rotate 3s linear infinite;
 }
 
-.target-point {
-    position: absolute;
-    width: 6px; height: 6px;
-    background: var(--accent-red);
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--accent-red);
-    animation: blink 0.8s infinite;
-}
-
 @keyframes rotate { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
-@keyframes blink { 0% {opacity: 1;} 50% {opacity: 0.3;} 100% {opacity: 1;} }
 
-/* STATS & PROGRESS */
-.stats-card {
-    width: 100%;
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 15px;
-    margin: 10px 0;
-    border: 1px solid rgba(255,255,255,0.1);
+.battle-dot {
+    position: absolute; width: 55px; height: 55px;
+    background: radial-gradient(circle, var(--accent-red), transparent);
+    border: 2px solid white; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; font-size: 16px;
+    box-shadow: 0 0 20px var(--accent-red);
+    z-index: 1000; animation: spawn 0.15s ease-out;
 }
 
-.progress-container {
-    width: 100%; height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    margin-top: 10px;
-    overflow: hidden;
+@keyframes spawn { from {transform: scale(0.5); opacity: 0;} to {transform: scale(1); opacity: 1;} }
+
+.battle-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95); display: none;
+    z-index: 999; flex-direction: column; align-items: center;
 }
 
-.progress-fill {
-    width: 0%; height: 100%;
-    background: var(--accent-blue);
-    box-shadow: 0 0 10px var(--accent-blue);
-    transition: width 0.4s ease;
-}
-
-/* BUTTON */
 .action-btn {
-    width: 100%;
-    padding: 18px;
-    background: var(--accent-blue);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 16px;
-    letter-spacing: 2px;
-    margin-top: 10px;
+    width: 100%; padding: 20px; background: var(--accent-blue);
+    color: white; border: none; border-radius: 12px;
+    font-weight: bold; font-size: 18px; letter-spacing: 2px;
+    margin-top: 20px; box-shadow: 0 4px 15px rgba(0,122,255,0.4);
 }
