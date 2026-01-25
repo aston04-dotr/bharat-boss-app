@@ -1,4 +1,5 @@
 const tg = window.Telegram.WebApp;
+const socket = io('https://atrociously-notionate-idalia.ngrok-free.dev');
 tg.expand();
 
 let balance = parseInt(localStorage.getItem('syndicate_inf')) || 0;
