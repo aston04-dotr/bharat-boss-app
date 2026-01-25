@@ -1,260 +1,40 @@
-:root{
-  --police-blue:#00d2ff;
-  --bandit-red:#ff0055;
-  --gold:#ffd700;
-  --bg:#000;
-  --panel:rgba(255,255,255,0.04);
-  --line:#222;
+:root {
+    --police-blue: #00d2ff;
+    --bandit-red: #ff0055;
+    --gold: #ffd700;
 }
 
-*{ box-sizing:border-box; }
-
-html,body{
-  height:100%;
+body {
+    background-color: #000;
+    color: white; font-family: 'Courier New', monospace;
+    margin: 0; padding: 20px; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center;
+    user-select: none; touch-action: manipulation;
 }
 
-body{
-  background:var(--bg);
-  color:#fff;
-  font-family:'Courier New',monospace;
-  margin:0;
-  padding:18px 18px 95px; /* место под нижнее меню */
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  -webkit-tap-highlight-color:transparent;
-  user-select:none;
-  touch-action:manipulation;
+/* Battle HUD (Верхние полоски) */
+.battle-hud {
+    width: 100%; margin-bottom: 20px;
+    display: flex; flex-direction: column; gap: 8px;
 }
+.progress-container {
+    width: 100%; height: 12px; background: rgba(255,255,255,0.1);
+    border-radius: 6px; overflow: hidden; border: 1px solid #333;
+}
+.bar-fill { height: 100%; width: 0%; transition: width 0.15s ease-out; }
 
-/* TOP STATUS BAR */
-.topbar{
-  width:100%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:10px;
-  opacity:.75;
-  gap:10px;
+/* Кнопка PUSH */
+.combat-dot {
+    position: absolute; width: 100px; height: 100px;
+    background: radial-gradient(circle, var(--police-blue), transparent);
+    border: 3px solid #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 18px; color: white;
+    box-shadow: 0 0 30px var(--police-blue);
+    z-index: 9999; animation: pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+@keyframes pop { from {transform: scale(0.5); opacity: 0;} to {transform: scale(1); opacity: 1;} }
 
-.topbar .left{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-
-.badge{
-  padding:3px 7px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  background:rgba(255,255,255,0.03);
-}
-
-.badge.red{
-  border-color:rgba(255,0,85,0.6);
-  color:var(--bandit-red);
-  text-shadow:0 0 10px rgba(255,0,85,0.55);
-  animation:faultPulse 1.2s ease-in-out infinite;
-}
-
-@keyframes faultPulse{
-  0%,100%{ opacity:.65; transform:translateY(0); }
-  50%{ opacity:1; transform:translateY(-0.5px); }
-}
-
-/* PAGES */
-.page{
-  width:100%;
-  max-width:520px;
-}
-
-/* Radar */
-#radar-container{
-  width:220px;height:220px;
-  margin:15px auto 10px;
-  border:2px solid var(--line);
-  border-radius:50%;
-  position:relative;
-  background:radial-gradient(circle, rgba(0,210,255,0.06) 0%, #000 70%);
-  box-shadow:0 0 25px rgba(0,210,255,0.10);
-}
-
-.radar-grid{
-  position:absolute; inset:0;
-  border-radius:50%;
-  background:
-    radial-gradient(circle, rgba(0,210,255,0.10) 1px, transparent 1px) center/22px 22px,
-    radial-gradient(circle, transparent 60%, rgba(0,210,255,0.08) 100%);
-  opacity:.35;
-  pointer-events:none;
-}
-
-.radar-scanner{
-  position:absolute; inset:0;
-  border-radius:50%;
-  background:conic-gradient(from 0deg, transparent, rgba(0,210,255,0.55));
-  opacity:.35;
-  animation:rotate 3.2s linear infinite;
-  filter:blur(0.2px);
-}
-
-@keyframes rotate{
-  from{ transform:rotate(0deg); }
-  to{ transform:rotate(360deg); }
-}
-
-/* Stats */
-.stats-card{
-  width:100%;
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:15px;
-  margin-bottom:12px;
-}
-
-.money{
-  font-size:32px;
-  font-weight:900;
-  color:#39ff14;
-  letter-spacing:0.5px;
-}
-
-.small{
-  font-size:10px;
-  opacity:.55;
-}
-
-/* Buttons */
-.action-btn{
-  width:100%;
-  padding:18px;
-  background:var(--police-blue);
-  color:#000;
-  border:none;
-  border-radius:14px;
-  font-weight:900;
-  font-size:16px;
-  letter-spacing:0.5px;
-  margin-top:10px;
-  box-shadow:0 0 25px rgba(0,210,255,0.20);
-}
-
-.action-btn:active{
-  transform:translateY(1px) scale(0.99);
-}
-
-/* Combat overlay */
-#combat-overlay{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,0.985);
-  display:none;
-  z-index:9999;
-  padding:18px;
-}
-
-.overlay-inner{
-  width:100%;
-  max-width:520px;
-  margin:0 auto;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-}
-
-.overlay-title{
-  text-align:center;
-  color:var(--bandit-red);
-  letter-spacing:2px;
-  margin:10px 0 12px;
-  text-shadow:0 0 14px rgba(255,0,85,0.4);
-}
-
-.progress-wrap{
-  height:8px;
-  background:#111;
-  width:100%;
-  border-radius:6px;
-  overflow:hidden;
-  border:1px solid #1f1f1f;
-}
-
-#progress-bar{
-  height:100%;
-  width:0%;
-  background:var(--police-blue);
-  transition:width .12s linear;
-}
-
-#arena{
-  flex:1;
-  width:100%;
-  margin-top:14px;
-  position:relative;
-  border:1px solid rgba(255,255,255,0.06);
-  border-radius:18px;
-  background:radial-gradient(circle at 50% 20%, rgba(0,210,255,0.05), transparent 50%);
-  overflow:hidden;
-}
-
-/* Target dot */
-.combat-dot{
-  position:absolute;
-  width:96px; height:96px;
-  border-radius:999px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-  font-size:18px;
-  color:#fff;
-  border:2px solid rgba(255,255,255,0.85);
-  background:radial-gradient(circle, rgba(0,210,255,0.95), rgba(0,210,255,0.10) 65%, transparent 72%);
-  box-shadow:0 0 34px rgba(0,210,255,0.55);
-  animation:popIn .18s ease-out;
-  will-change:transform;
-}
-
-@keyframes popIn{
-  from{ transform:scale(0.0); }
-  to{ transform:scale(1.0); }
-}
-
-.combat-dot:active{
-  transform:scale(0.96);
-}
-
-/* Bottom nav */
-.bottom-nav{
-  position:fixed;
-  bottom:0; left:0;
-  width:100%;
-  height:75px;
-  background:#0a0a0a;
-  border-top:1px solid var(--line);
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.nav-item{
-  font-size:26px;
-  opacity:.45;
-  transition:.25s;
-}
-
-.nav-item.active{
-  opacity:1;
-  transform:scale(1.18);
-  color:var(--police-blue);
-  filter:drop-shadow(0 0 10px rgba(0,210,255,0.25));
-}
-
-/* Utility */
-.center-title{
-  text-align:center;
-  margin:6px 0 12px;
-}
+/* Остальные элементы */
+.stats-card { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid #222; border-radius: 15px; padding: 15px; margin-bottom: 15px; }
+.action-btn { width: 100%; padding: 20px; background: var(--police-blue); color: black; border: none; border-radius: 12px; font-weight: bold; font-size: 18px; }
