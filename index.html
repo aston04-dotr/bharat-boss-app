@@ -1,84 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>BHARAT BOSS OS</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SYNDICATE TERMINAL</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- TOP LINE (как “конкурент”, красная поломка) -->
-  <div class="topbar">
-    <div class="left">
-      <span class="badge">SYNC: OK</span>
-      <span class="badge red">BOT: DOWN • FAULT</span>
-    </div>
-    <span id="stars">⭐⭐⭐</span>
-  </div>
-
-  <!-- PAGE: RADAR -->
-  <div id="page-radar" class="page">
-    <div id="radar-container">
-      <div class="radar-grid"></div>
-      <div class="radar-scanner"></div>
+    <div id="page-radar" style="width: 100%;">
+        <div style="text-align: center; font-size: 10px; opacity: 0.5; margin-bottom: 10px;">ENCRYPTED_LINK: ACTIVE</div>
+        <div class="stats-card">
+            <div style="font-size: 12px; color: var(--police-blue);">TOTAL INFLUENCE:</div>
+            <div style="font-size: 32px; font-weight: bold; color: #39ff14;">$ <span id="balance">0</span></div>
+        </div>
+        <button id="start-btn" class="action-btn">EXECUTE MISSION</button>
     </div>
 
-    <div class="stats-card">
-      <div style="font-size:12px;color:var(--police-blue);">OPERATIVE INFLUENCE:</div>
-      <div class="money">$ <span id="balance">0</span></div>
-      <div class="small" style="margin-top:10px;">RANK: <span id="rank">RECRUIT</span></div>
+    <div id="combat-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); display:none; z-index:9999; padding:20px; box-sizing:border-box;">
+        <div class="battle-hud">
+            <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--police-blue);"><span>YOU (OPERATIVE)</span><span id="your-count">0/15</span></div>
+            <div class="progress-container"><div id="your-bar" class="bar-fill" style="background:var(--police-blue);"></div></div>
+            
+            <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--bandit-red); margin-top:5px;"><span>OPPONENT (BOT)</span><span id="enemy-count">0/15</span></div>
+            <div class="progress-container"><div id="enemy-bar" class="bar-fill" style="background:var(--bandit-red);"></div></div>
+        </div>
+        <div id="arena" style="width: 100%; height: 70%; position: relative;"></div>
     </div>
 
-    <button id="start-btn" class="action-btn">INITIALIZE MISSION</button>
-    <div class="small" style="margin-top:10px; text-align:center;">
-      TAP THE TARGET • NO SOUND • PURE SPEED
-    </div>
-  </div>
-
-  <!-- PAGE: MARKET -->
-  <div id="page-market" class="page" style="display:none;">
-    <h2 class="center-title" style="color: var(--gold);">BLACK MARKET</h2>
-    <div class="stats-card">
-      <p class="small">Items available soon...</p>
-    </div>
-  </div>
-
-  <!-- PAGE: LEADERS -->
-  <div id="page-leaders" class="page" style="display:none;">
-    <h2 class="center-title" style="color: var(--police-blue);">TOP OPERATIVES</h2>
-    <div class="stats-card" id="leader-list">
-      <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222;">
-        <span>#1 BHARAT_BOSS</span><span>1.2M</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- COMBAT OVERLAY -->
-  <div id="combat-overlay">
-    <div class="overlay-inner">
-      <h2 class="overlay-title">TARGET LOCATED</h2>
-      <div class="progress-wrap">
-        <div id="progress-bar"></div>
-      </div>
-      <div id="arena"></div>
-      <div class="small" style="text-align:center; margin-top:10px; opacity:.6;">
-        HIT <span id="hits">0</span>/<span id="goal">15</span>
-      </div>
-      <button id="exit-btn" class="action-btn" style="margin-top:12px; background:#111; color:#fff; border:1px solid #222;">
-        ABORT
-      </button>
-    </div>
-  </div>
-
-  <!-- NAV -->
-  <div class="bottom-nav">
-    <div class="nav-item active" data-page="radar">📡</div>
-    <div class="nav-item" data-page="market">🛒</div>
-    <div class="nav-item" data-page="leaders">🏆</div>
-  </div>
-
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
