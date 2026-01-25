@@ -1,40 +1,65 @@
 :root {
-    --police-neon: #00d2ff;
-    --bandit-neon: #ff0055;
+    --police-blue: #00d2ff;
+    --bandit-red: #ff0055;
     --gold: #ffd700;
-    --row-bg: rgba(255, 255, 255, 0.05);
 }
 
-/* Leaderboard Styles */
-.leaderboard-list {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 20px;
+body {
+    background-color: #000;
+    color: white; font-family: 'Courier New', monospace;
+    margin: 0; padding: 20px; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center;
+    user-select: none; touch-action: manipulation;
 }
 
-.leader-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 15px;
-    background: var(--row-bg);
-    border-radius: 10px;
-    border: 1px solid #222;
+/* Radar Section */
+#radar-container {
+    width: 220px; height: 220px; margin: 15px auto;
+    border: 2px solid #222; border-radius: 50%; position: relative;
+    background: radial-gradient(circle, rgba(0,210,255,0.05) 0%, black 100%);
 }
 
-.leader-rank { color: var(--gold); font-weight: bold; width: 30px; }
-.leader-name { flex-grow: 1; margin-left: 10px; font-size: 14px; }
-.leader-score { color: var(--police-neon); font-weight: bold; }
+.radar-scanner {
+    position: absolute; width: 100%; height: 100%;
+    background: conic-gradient(from 0deg, transparent, var(--police-blue));
+    border-radius: 50%; opacity: 0.3;
+    animation: rotate 4s linear infinite;
+}
 
-/* Large Push Dot */
+@keyframes rotate { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
+
+/* Stats Card */
+.stats-card {
+    width: 100%; background: rgba(255,255,255,0.03);
+    border: 1px solid #222; border-radius: 15px;
+    padding: 15px; margin-bottom: 15px; box-sizing: border-box;
+}
+
+/* Combat Mode Dots */
 .combat-dot {
-    position: absolute; width: 95px; height: 95px;
-    background: radial-gradient(circle, var(--police-neon), transparent);
-    border: 3px solid white; border-radius: 50%;
+    position: absolute; width: 95px; height: 95px; /* Большой размер */
+    background: radial-gradient(circle, var(--police-blue), transparent);
+    border: 3px solid #fff; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-weight: 900; letter-spacing: 1px;
-    box-shadow: 0 0 30px var(--police-neon);
-    z-index: 1000; cursor: pointer;
+    font-weight: 900; font-size: 18px; color: white;
+    box-shadow: 0 0 30px var(--police-blue);
+    z-index: 9999; animation: popIn 0.2s ease-out;
+}
+
+@keyframes popIn { from {transform: scale(0);} to {transform: scale(1);} }
+
+/* Navigation */
+.bottom-nav {
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    height: 75px; background: #0a0a0a; border-top: 1px solid #222;
+    display: flex; justify-content: space-around; align-items: center;
+}
+
+.nav-item { font-size: 26px; opacity: 0.4; transition: 0.3s; }
+.nav-item.active { opacity: 1; transform: scale(1.2); color: var(--police-blue); }
+
+.action-btn {
+    width: 100%; padding: 20px; background: var(--police-blue);
+    color: black; border: none; border-radius: 12px;
+    font-weight: bold; font-size: 18px; margin-top: 10px;
 }
