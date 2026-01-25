@@ -1,25 +1,32 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-let balance = parseInt(localStorage.getItem('inf_db')) || 0;
-let role = "POLICE"; // Можно менять на "BANDIT"
-let myHits = 0;
-let enemyHits = 0;
-const goal = 12;
-let botInterval;
+let balance = parseInt(localStorage.getItem('inf_db')) || 10000;
+let botSpeed = 600; // Базовая скорость бота
+let myHits = 0, enemyHits = 0;
+const goal = 15;
+let botTimer;
 
 function updateUI() {
     document.getElementById('balance').innerText = balance.toLocaleString();
     localStorage.setItem('inf_db', balance);
 }
 
+function buyItem(id, price) {
+    if (balance >= price) {
+        balance -= price;
+        if (id === 'JAMMER') botSpeed += 200; // Замедляем бота
+        tg.showAlert(`SUCCESS: ${id} ACQUIRED!`);
+        updateUI();
+    } else {
+        tg.showAlert("LACK OF FUNDS");
+    }
+}
+
 function switchTab(tab) {
-    tg.HapticFeedback.impactOccurred('light');
     document.getElementById('page-radar').style.display = tab === 'radar' ? 'block' : 'none';
     document.getElementById('page-market').style.display = tab === 'market' ? 'block' : 'none';
-    const btns = document.querySelectorAll('.nav-btn');
-    btns[0].classList.toggle('active', tab === 'radar');
-    btns[1].classList.toggle('active', tab === 'market');
+    tg.HapticFeedback.impactOccurred('light');
 }
 
 function startCombat() {
@@ -27,12 +34,14 @@ function startCombat() {
     document.getElementById('combat-screen').style.display = 'block';
     spawnTarget();
     
-    // Enemy Bot Simulation
-    botInterval = setInterval(() => {
-        enemyHits++;
-        updateBars();
-        if (enemyHits >= goal) endCombat(false);
-    }, Math.random() * 300 + 400);
+    // Smart Bot: он делает паузы, имитируя человека
+    botTimer = setInterval(() => {
+        if (Math.random() > 0.3) { // 30% шанс, что бот "промахнется"
+            enemyHits++;
+            updateBars();
+            if (enemyHits >= goal) endCombat(false);
+        }
+    }, botSpeed);
 }
 
 function updateBars() {
@@ -45,8 +54,8 @@ function spawnTarget() {
     arena.innerHTML = '';
     const dot = document.createElement('div');
     dot.className = 'combat-dot';
-    dot.style.top = Math.random() * 75 + "%";
-    dot.style.left = Math.random() * 70 + "%";
+    dot.style.top = Math.random() * 70 + 5 + "%";
+    dot.style.left = Math.random() * 70 + 5 + "%";
     dot.innerText = "KILL";
 
     dot.onclick = () => {
@@ -60,14 +69,14 @@ function spawnTarget() {
 }
 
 function endCombat(win) {
-    clearInterval(botInterval);
+    clearInterval(botTimer);
     document.getElementById('combat-screen').style.display = 'none';
     if (win) {
-        balance += 15000;
-        tg.showAlert("TARGET NEUTRALIZED! +$15,000");
+        balance += 12000;
+        tg.showAlert("MISSION SUCCESS +$12,000");
     } else {
-        balance = Math.max(0, balance - 5000);
-        tg.showAlert("TARGET ESCAPED! -$5,000");
+        balance = Math.max(0, balance - 4000);
+        tg.showAlert("MISSION FAILED -$4,000");
     }
     updateUI();
 }
