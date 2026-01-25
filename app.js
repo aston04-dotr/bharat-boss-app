@@ -2,77 +2,26 @@ const tg = window.Telegram.WebApp;
 const socket = io('https://atrociously-notionate-idalia.ngrok-free.dev');
 tg.expand();
 
-let balance = parseInt(localStorage.getItem('syndicate_inf')) || 0;
-let myHits = 0, enemyHits = 0;
-const goal = 15;
-let botBrain;
+// Находим кнопку и счетчик денег
+const missionBtn = document.getElementById('mission-btn');
+const balanceDisplay = document.querySelector('.stat-value'); // Это твой баланс $ 0
 
-function updateUI() {
-    document.getElementById('balance').innerText = balance.toLocaleString();
-    localStorage.setItem('syndicate_inf', balance);
-}
+let balance = 0;
 
-function startCombat() {
-    myHits = 0; enemyHits = 0;
-    document.getElementById('combat-overlay').style.display = 'block';
-    updateBars();
-    spawnTarget();
+missionBtn.onclick = () => {
+    // 1. Отправляем сигнал на твой макбук
+    socket.emit('click');
     
-    // Бот начинает "думать" и нажимать
-    botBrain = setInterval(() => {
-        if (Math.random() > 0.4) { // Бот иногда ошибается, давая тебе шанс
-            enemyHits++;
-            updateBars();
-            if (enemyHits >= goal) endCombat(false);
-        }
-    }, 550); // Скорость бота
-}
-
-function updateBars() {
-    // Твоя полоска
-    document.getElementById('your-bar').style.width = (myHits / goal * 100) + "%";
-    document.getElementById('your-count').innerText = `${myHits}/${goal}`;
-    // Полоска бота
-    document.getElementById('enemy-bar').style.width = (enemyHits / goal * 100) + "%";
-    document.getElementById('enemy-count').innerText = `${enemyHits}/${goal}`;
-}
-
-function spawnTarget() {
-    const arena = document.getElementById('arena');
-    arena.innerHTML = '';
-    const dot = document.createElement('div');
-    dot.className = 'combat-dot';
-    dot.style.top = Math.random() * 80 + 5 + "%";
-    dot.style.left = Math.random() * 80 + 5 + "%";
-    dot.innerText = "PUSH";
-
-    dot.onclick = (e) => {
-        e.stopPropagation();
-        tg.HapticFeedback.impactOccurred('heavy');
-        myHits++;
-        updateBars();
-        if (myHits >= goal) endCombat(true);
-        else spawnTarget();
-    };
-    arena.appendChild(dot);
-}
-
-function endCombat(win) {
-    clearInterval(botBrain);
-    document.getElementById('combat-overlay').style.display = 'none';
-    if (win) {
-        balance += 15000;
-        tg.showAlert("SUCCESS: Target Intercepted! +$15,000");
-    } else {
-        balance = Math.max(0, balance - 5000);
-        tg.showAlert("FAILED: Target Escaped! -$5,000");
-    }
-    updateUI();
-}
-
-document.getElementById('start-btn').onclick = () => {
-    tg.HapticFeedback.notificationOccurred('success');
-    startCombat();
+    // 2. Увеличиваем баланс в приложении
+    balance += 10;
+    balanceDisplay.textContent = `$ ${balance}`;
+    
+    // 3. Вибрация телефона (чтобы чувствовался клик)
+    tg.HapticFeedback.impactOccurred('medium');
 };
 
-updateUI();
+// Слушаем ответ от сервера (если сервер пришлет подтверждение)
+socket.on('update_balance', (data) => {
+    balance = data.new_balance;
+    balanceDisplay.textContent = `$ ${balance}`;
+});
