@@ -1,33 +1,60 @@
-/* Bottom Navigation */
+:root {
+    --police-neon: #00d2ff;
+    --bandit-neon: #ff0055;
+    --gold: #ffd700;
+}
+
+body {
+    background-color: #000;
+    color: white;
+    font-family: 'Courier New', monospace;
+    margin: 0; padding: 20px;
+    display: flex; flex-direction: column; align-items: center;
+    user-select: none; touch-action: manipulation;
+}
+
+/* Radar & Scanning */
+#radar-container {
+    width: 240px; height: 240px;
+    margin: 20px auto; border: 2px solid #222;
+    border-radius: 50%; position: relative;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, black 100%);
+    box-shadow: 0 0 30px rgba(0,0,0,1);
+}
+
+.radar-scanner {
+    position: absolute; width: 100%; height: 100%;
+    background: conic-gradient(from 0deg, transparent, var(--police-neon));
+    border-radius: 50%; opacity: 0.3;
+    animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
+
+/* Big Combat Dots */
+.combat-dot {
+    position: absolute; width: 85px; height: 85px; /* Увеличил размер для удобства */
+    background: radial-gradient(circle, var(--bandit-neon), transparent);
+    border: 4px solid white; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 20px;
+    box-shadow: 0 0 40px var(--bandit-neon);
+    z-index: 1000; animation: spawn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes spawn { from {transform: scale(0);} to {transform: scale(1);} }
+
+/* Navigation & Tabs */
 .bottom-nav {
     position: fixed; bottom: 0; left: 0; width: 100%;
-    height: 70px; background: rgba(0,0,0,0.9);
+    height: 80px; background: rgba(10, 10, 10, 0.95);
     border-top: 1px solid #333; display: flex;
-    justify-content: space-around; align-items: center; z-index: 1000;
+    justify-content: space-around; align-items: center;
 }
 
-.nav-item { color: #555; font-size: 24px; cursor: pointer; transition: 0.3s; }
-.nav-item.active { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+.nav-btn { font-size: 28px; opacity: 0.4; transition: 0.3s; }
+.nav-btn.active { opacity: 1; transform: scale(1.2); }
 
-/* Market UI */
-.market-container {
-    display: none; width: 100%; padding-bottom: 80px;
-    animation: fadeIn 0.5s;
-}
-
-.market-item {
-    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.5) 100%);
-    border: 1px solid #222; border-radius: 15px;
-    padding: 15px; margin-bottom: 15px; display: flex;
-    justify-content: space-between; align-items: center;
-}
-
-.item-info h3 { margin: 0; color: var(--neon-blue); font-size: 16px; }
-.item-info p { margin: 5px 0; font-size: 10px; opacity: 0.6; }
-
-.buy-btn {
-    background: #00ff00; color: black; border: none;
-    padding: 8px 15px; border-radius: 5px; font-weight: bold;
-}
-
-@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+/* Bars */
+.progress-container { width: 100%; height: 10px; background: #111; border-radius: 5px; margin: 5px 0; overflow: hidden; }
+.progress-fill { height: 100%; width: 0%; transition: 0.2s; }
