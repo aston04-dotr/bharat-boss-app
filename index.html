@@ -1,14 +1,58 @@
-<div id="page-leaders" class="page" style="display:none; width: 100%;">
-    <h2 style="text-align: center; color: var(--police-neon); letter-spacing: 3px;">TOP OPERATIVES</h2>
-    <div class="leaderboard-list" id="leader-list">
-        <div class="leader-row"><span class="leader-rank">#1</span><span class="leader-name">BHARAT_BOSS</span><span class="leader-score">1.2M</span></div>
-        <div class="leader-row"><span class="leader-rank">#2</span><span class="leader-name">GHOST_AGENT</span><span class="leader-score">850K</span></div>
-        <div class="leader-row"><span class="leader-rank">#3</span><span class="leader-name">UNKNOWN_USER</span><span class="leader-score">420K</span></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BHARAT BOSS OS</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div style="width: 100%; display: flex; justify-content: space-between; font-size: 10px; opacity: 0.6;">
+        <span>SYNC_STATUS: OK</span>
+        <span id="stars">⭐⭐⭐</span>
     </div>
-</div>
 
-<div class="bottom-nav">
-    <div class="nav-btn active" onclick="switchTab('radar')">📡</div>
-    <div class="nav-btn" onclick="switchTab('market')">🛒</div>
-    <div class="nav-btn" onclick="switchTab('leaders')">🏆</div>
-</div>
+    <div id="page-radar" class="page">
+        <div id="radar-container"><div class="radar-scanner"></div></div>
+        <div class="stats-card">
+            <div style="font-size: 12px; color: var(--police-blue);">OPERATIVE INFLUENCE:</div>
+            <div style="font-size: 32px; font-weight: bold; color: #39ff14;">$ <span id="balance">0</span></div>
+            <div style="margin-top: 10px; font-size: 10px; opacity: 0.5;">RANK: RECRUIT</div>
+        </div>
+        <button id="start-btn" class="action-btn">INITIALIZE MISSION</button>
+    </div>
+
+    <div id="page-market" class="page" style="display:none; width: 100%;">
+        <h2 style="text-align: center; color: var(--gold);">BLACK MARKET</h2>
+        <div style="background:#111; padding:15px; border-radius:10px; border:1px solid #222;">
+            <p style="font-size:12px; opacity:0.6;">Items available soon...</p>
+        </div>
+    </div>
+
+    <div id="page-leaders" class="page" style="display:none; width: 100%;">
+        <h2 style="text-align: center; color: var(--police-blue);">TOP OPERATIVES</h2>
+        <div style="background:#111; padding:10px; border-radius:10px;" id="leader-list">
+            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #222;">
+                <span>#1 BHARAT_BOSS</span><span>1.2M</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="combat-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); display:none; z-index:9999; padding:20px; box-sizing:border-box;">
+        <h2 style="text-align: center; color: var(--bandit-red);">TARGET LOCATED</h2>
+        <div style="height:8px; background:#111; width:100%; border-radius:4px; margin-bottom:15px;">
+            <div id="progress-bar" style="height:100%; width:0%; background:var(--police-blue); transition:0.2s;"></div>
+        </div>
+        <div id="arena" style="width: 100%; height: 75%; position: relative;"></div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showPage('radar')">📡</div>
+        <div class="nav-item" onclick="showPage('market')">🛒</div>
+        <div class="nav-item" onclick="showPage('leaders')">🏆</div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
