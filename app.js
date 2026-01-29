@@ -1,5 +1,5 @@
 const tg = window.Telegram.WebApp;
-const socket = io('https://atrociously-notionate-idalia.ngrok-free.dev');
+const socket = io();
 tg.expand();
 
 // Находим кнопку и счетчик денег

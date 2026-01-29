@@ -64,7 +64,8 @@ Create package.json with required dependencies and npm scripts:
 
 ---
 
-### [ ] Step: Implement Web Server
+### [x] Step: Implement Web Server
+<!-- chat-id: fb77d429-eb35-40e5-b8ec-f5a3f8799d79 -->
 
 Create server.js to:
 - Serve static files (index.html, app.js, style.css)
