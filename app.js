@@ -1,10 +1,10 @@
 const tg = window.Telegram.WebApp;
-const socket = io('https://atrociously-notionate-idalia.ngrok-free.dev');
+const socket = io();
 tg.expand();
 
 // Находим кнопку и счетчик денег
-const missionBtn = document.getElementById('mission-btn');
-const balanceDisplay = document.querySelector('.stat-value'); // Это твой баланс $ 0
+const missionBtn = document.getElementById('start-btn');
+const balanceDisplay = document.getElementById('balance');
 
 let balance = 0;
 
@@ -14,7 +14,7 @@ missionBtn.onclick = () => {
     
     // 2. Увеличиваем баланс в приложении
     balance += 10;
-    balanceDisplay.textContent = `$ ${balance}`;
+    balanceDisplay.textContent = balance;
     
     // 3. Вибрация телефона (чтобы чувствовался клик)
     tg.HapticFeedback.impactOccurred('medium');
@@ -23,5 +23,5 @@ missionBtn.onclick = () => {
 // Слушаем ответ от сервера (если сервер пришлет подтверждение)
 socket.on('update_balance', (data) => {
     balance = data.new_balance;
-    balanceDisplay.textContent = `$ ${balance}`;
+    balanceDisplay.textContent = balance;
 });

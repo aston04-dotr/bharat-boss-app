@@ -1,0 +1,19 @@
+{
+  "name": "telegram-webapp-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot with WebApp and socket.io integration",
+  "main": "server.js",
+  "scripts": {
+    "start": "concurrently \"node bot.js\" \"node server.js\""
+  },
+  "keywords": ["telegram", "bot", "webapp", "socketio"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1",
+    "node-telegram-bot-api": "^0.64.0",
+    "dotenv": "^16.3.1",
+    "concurrently": "^8.2.2"
+  }
+}
