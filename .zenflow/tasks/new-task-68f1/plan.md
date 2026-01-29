@@ -78,7 +78,8 @@ Create server.js to:
 
 ---
 
-### [ ] Step: Implement Telegram Bot
+### [x] Step: Implement Telegram Bot
+<!-- chat-id: 0dbaac2b-6a9c-4f80-813c-9e31534cd2a8 -->
 
 Create bot.js to:
 - Initialize Telegram bot with BOT_TOKEN from .env
