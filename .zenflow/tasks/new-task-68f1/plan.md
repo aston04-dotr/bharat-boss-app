@@ -18,7 +18,8 @@ Do not make assumptions on important decisions — get clarification first.
 
 ## Workflow Steps
 
-### [ ] Step: Technical Specification
+### [x] Step: Technical Specification
+<!-- chat-id: b6862e44-7783-4ebd-906f-8fd703f85077 -->
 
 Assess the task's difficulty, as underestimating it leads to poor outcomes.
 - easy: Straightforward implementation, trivial bug fix or feature
@@ -50,15 +51,54 @@ Save to `{@artifacts_path}/plan.md`. If the feature is trivial and doesn't warra
 
 ---
 
-### [ ] Step: Implementation
+### [ ] Step: Create Project Configuration
 
-Implement the task according to the technical specification and general engineering best practices.
+Create package.json with required dependencies and npm scripts:
+- Add express, socket.io, node-telegram-bot-api, dotenv
+- Configure npm start script to run both bot.js and server.js
+- Set up .gitignore with node_modules/, .env, *.log
+- Create .env.example template
 
-1. Break the task into steps where possible.
-2. Implement the required changes in the codebase.
-3. Add and run relevant tests and linters.
-4. Perform basic manual verification if applicable.
-5. After completion, write a report to `{@artifacts_path}/report.md` describing:
+**Verification**: Run `npm install` successfully
+
+---
+
+### [ ] Step: Implement Web Server
+
+Create server.js to:
+- Serve static files (index.html, app.js, style.css)
+- Initialize socket.io server
+- Handle 'click' events from clients
+- Emit 'update_balance' events
+- Update app.js to connect to relative socket.io URL (remove hardcoded ngrok)
+
+**Verification**: Server starts without errors, serves static files correctly
+
+---
+
+### [ ] Step: Implement Telegram Bot
+
+Create bot.js to:
+- Initialize Telegram bot with BOT_TOKEN from .env
+- Handle /start command with WebApp button
+- Provide instructions and welcome message
+
+**Verification**: Bot responds to commands in Telegram
+
+---
+
+### [ ] Step: Final Integration and Testing
+
+1. Test complete deployment flow:
+   - Run npm install
+   - Configure .env with BOT_TOKEN
+   - Run npm start
+2. Verify end-to-end functionality:
+   - Bot launches WebApp
+   - UI loads correctly
+   - Click events work
+   - Socket.io communication functions
+3. Write report to `{@artifacts_path}/report.md` describing:
    - What was implemented
    - How the solution was tested
-   - The biggest issues or challenges encountered
+   - Any issues encountered
